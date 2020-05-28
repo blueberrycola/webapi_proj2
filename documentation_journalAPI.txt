@@ -1,0 +1,127 @@
+Documentation of Journal API:
+www.cooljournalapi.net/v1/
+Endpoint: users - information about the people using the service
+
+class user {
+    string username;
+    string password;
+    //Pointer to the container that contains journal entries
+    int journal_id;
+}
+
+query user info
+update user info
+create new users
+delete user
+
+Lookup info:
+GET /search/        Responces: 200, 404
+GET /user/42/       Responces: 200 on Success, 404 if failed
+
+Replace all info:
+
+PUT /user/42/        Responces: 200, 404, 405, 403(if inadequate permissions)
+
+Update info:
+
+PATCH /user/42/     Responces: 200, 404, 405, 403
+
+delete user:
+DELETE user/42/     Responces: 200, 404, 403
+
+Endpoint: journalEntries - contains the journalEntries for a given user
+
+All journal entries are stored in the server by .txt files that can be requested via its entry_id
+class journalEntries {
+    string name;
+    string date_created;
+    string created_by;
+    string entry_id;
+    string directory_txtfile;
+    string[] image_identifiers;
+    int word_count;
+} 
+
+create journal entry
+edit journal entry
+delete journal entry
+save journal entry locally
+
+create journal entry:
+PUT user/42/journal/entry001 Responces: 200, 404, 403(if trying to make a journal in a account you are not logged into or standard-user permissions)
+edit journal entry:
+PATCH user/42/journal/entry001 Responces 200, 404
+delete journal entry:
+DELETE user/42/journal/entry001/        Responces: 200, 404, 403(you must either be the user itself or admin)
+save journal entry locally:
+GET user/42/journal/entry001            Responces: 200, 404
+
+
+images - Every image on the site with data about the image
+class image {
+    string directory_location;
+    //Where the image will be viewed after a certain amount of words is exceeded in an entry
+    int word_placeholder;
+    string file_type;
+    string[] resolutions;
+    int like_value;
+}
+place image on website
+ability to save image from site
+ability to give the image a 'like'
+delete image
+
+place image on website:
+
+PUT user/42/journal/entry001/image001/        Responces: 200, 404
+save image on site:
+GET user/42/journal/entry001/image001/       Responces: 200, 404
+give image 'like':
+PATCH user/42/journal/entry001/image001/    Responces: 200, 404
+delete image:
+DELETE user/42/journal/entry001/image001/ Responces: 200, 404, 403, 405
+
+
+comments - What other users have to say for each entry
+class comments {
+    int char_limit;
+    string comment;
+    string created_by;
+    string date_created;
+    boolean edited_flag;
+}
+create comment
+edit comment
+delete comment
+see who made the comment
+extract comment
+
+
+create comment:
+PUT user/42/journal/entry001/comments/created_by/42        Responces: 200, 404
+edit comment:
+PATCH user/42/journal/entry001/comments/created_by/42      Responces: 200, 404, 403
+delete comment:
+DELETE user/42/journal/entry001/comments/created_by/42     Responces: 200, 404, 403
+see who made comment
+GET user/42/journal/entry001/comments/created_by/32         Responces: 200, 404, 403
+Extract comment:
+GET user/42/journal/entry001/comments/created_by/32         Responces: 200, 404, 403
+
+
+locations - Where the entries we posted from
+class locations {
+    string ip;
+    string user-agent;
+    string location;
+    boolean using_proxy;
+}
+display locations of a user
+change if user is using proxy
+
+display info of locations of a user:
+GET /user/42/locations/     Responces: 200, 403, 404
+PATCH /user/42/locations/using_proxy/       Responces: 200, 403, 404
+
+permissions - Who is able to view, modify, create, and delete certain resources within the site
+
