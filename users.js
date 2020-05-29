@@ -1,5 +1,14 @@
 // All user endpoints in this file
 module.exports = function(app){
+	//Schema for user object
+	const mongoose = require('mongoose');
+	const user = mongoose.Schema({
+		_id: mongoose.Types.ObjectId,
+		name: String
+	});
+	
+	
+	
 	// Get all users
 	app.get('/users/', (req, res) => {
 			const db = req.app.locals.db;
@@ -9,20 +18,18 @@ module.exports = function(app){
 					res.send(data);
 					});
 			});
-	// Get a specific user
+	// Get a specific user      5ed03eef3e623af0d588cc26
+	
 	app.get('/users/:id', function (req, res) {
 		let id = req.params["id"];
 		const db = req.app.locals.db;
-		console.log(id);
+		console.log(req.body);
+		id = req.params["id"];
 		const collection = db.collection('users');
-		var mongo = require('mongodb');
-		var o_id = new mongo.ObjectID(id);
-		var name = collection.find({'_id': o_id});
-		//res.send(name);
-		console.log(name);
-
-
-		
+		collection.find({ _id : ObjectId(id)}).toArray(function(err, data){
+			console.log(data);
+			res.send(data);
+		});
 	});
 	app.put('/users/:id', function (req, res) {
 		res.send('put request to the homepage')
